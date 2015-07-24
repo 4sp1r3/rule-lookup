@@ -10,28 +10,50 @@ class RuleLookup(object):
     def __init__(self):
         self.allrules_url = None
         self.sensorhostname = ""
-        self.rulesdirectory = ""
         self.allrules_location = ""
         self.allrules = True
         self.flowbits = []
         self.credentials = None
 
 
-    def command(self, command):
-        if not self.credentials:
-            self.username = raw_input("Username: ")
-            self.password = getpass.getpass()
-            self.credentials = True
+    def command(self, auth_type, command):
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(
-                    self.sensorhostname,
-                    username=self.username,
-                    password=self.password
-                   )
-        stdin, stdout, stderr = ssh.exec_command(command)
         
+
+        if auth_type == "certificate":
+            if not self.credentials:
+                self.username = raw_input("Username: ")
+                self.credentials = True
+
+            try:
+                ssh.connect(
+                        self.sensorhostname,
+                        username=self.username,
+                        look_for_keys=True
+                           )
+            except paramiko.AuthenticationException:
+                sys.exit("[-] Authentication failed")
+
+        if auth_type == "password":
+
+            if not self.credentials:
+                self.username = raw_input("Username: ")
+                self.password = getpass.getpass()
+                self.credentials = True
+
+            try:
+                ssh.connect(
+                        self.sensorhostname,
+                        username=self.username,
+                        password=self.password
+                           )
+            except paramiko.AuthenticationException:
+                sys.exit("[-] Authentication failed")
+
+        stdin, stdout, stderr = ssh.exec_command(command)
+
         return stdout.read()
 
 
@@ -52,22 +74,30 @@ class RuleLookup(object):
                 self.flowbits.append(line)
 
 
-    def rulelookup_ssh_password(self, sid):
+    def rulelookup_ssh(self, auth_type, sid):
 
-        if self.allrules:
-            foundrule = self.command("grep {} {}".format(sid, self.allrules_location))
-            
-            if foundrule:
-                pass
-            else:
-                print "[-] sid not found"
+        findsid = "grep {} {}".format(sid, self.allrules_location)
 
-            if foundrule and ("flowbits:isset" in foundrule):
-                reg = re.search("flowbits:isset,([a-zA-Z0-9\.]+)", foundrule)
-                flowbitgroup = reg.group(1)
-                foundbits = self.command("grep \"flowbits:set,{};\" {}".format(flowbitgroup, self.allrules_location))
-                print "\n==============\nsid {}\n==============\n\n{}".format(sid, foundrule)
-                print "==============\nFlowbits\n==============\n\n{}".format(foundbits)
+        foundrule = self.command(auth_type, findsid)
+
+        if not foundrule:
+            print "[-] sid not found"
+            sys.exit()
+
+        elif foundrule and ("flowbits:isset" in foundrule):
+            reg = re.search("flowbits:isset,([a-zA-Z0-9\.]+)", foundrule)
+            flowbitgroup = reg.group(1)
+            findflowbits = "grep \"flowbits:set,{};\" {}".format(flowbitgroup, self.allrules_location)
+            foundrule = foundrule
+            foundbits = self.command(auth_type, findflowbits)
+
+            print "\n==============\nsid {}\n==============\n\n{}".format(sid, foundrule)
+            print "==============\nFlowbits\n==============\n\n{}".format(foundbits)
+
+        else:
+            print "\n==============\nsid {}\n==============\n\n{}".format(sid, foundrule)
+
+        
 
 
 p = ArgumentParser()
@@ -79,4 +109,8 @@ args = p.parse_args()
 
 if args.password:
     r = RuleLookup()
-    r.rulelookup_ssh_password(args.sid)
+    r.rulelookup_ssh("password", args.sid)
+
+if args.certificate:
+    r = RuleLookup()
+    r.rulelookup_ssh("certificate", args.sid)
