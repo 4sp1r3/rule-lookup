@@ -10,26 +10,26 @@ class RuleLookup(object):
 
     def __init__(self):
 
-        # The two settings below are not to be touched by the User,
-        # they pseudo track state and authentication types to
-        # prevent Paramiko from prompting for authentication during 
-        # second connection to check for flowbits 
-        self.auth_type = None    
-        self.credentials = False
-
         # Configuration settings, to be selected by the User
         # Sensor can be IP or hostname
         # rulesfile_type identifies a single rules file or multiple
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = ""
-        self.rulesfile_type = "single/multiple"
-        self.rules_location = ""
+        self.sensor = "IP address / hostname"
+        self.rulesfile_type = "single / multiple"
+        self.rules_location = "rules directory or allrules file path"
 
-        self.password_protected_key = False
-        self.keypassword = False
+        # The two settings below are not to be touched by the User,
+        # they pseudo track state and authentication types to
+        # prevent Paramiko from prompting for authentication during 
+        # second connection to check for flowbits 
+        self.auth_type = None
+        self.credentials = False
 
+        # If hosting the content of an allrules file on a web server,
+        # the allRules URL is to be set below:
         self.allrules_url = None
+
 
     def command(self, search_string):
 
@@ -112,7 +112,7 @@ class RuleLookup(object):
             if "flowbits:set,{};".format(flowbitgroup) in line:
                 self.flowbits.append(line)
 
-    def get_flowbits(self, results):
+    def get_flowbits(self, sidresults):
 
         reg = re.search("flowbits:isset,([a-zA-Z0-9\.]+)", sidresults)
         flowbitgroup = reg.group(1)
@@ -125,6 +125,24 @@ class RuleLookup(object):
             flowbits = self.ssh_auth_password(findbits_command)
 
         return flowbits
+
+    def pretty_print(self, results):
+
+        border = "============="
+
+        if "flowbits:isset" in results:
+            print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
+
+        elif "flowbits:set" and "flowbits:noalert;" in results:
+            print "{0}\nFlowbits\n{0}\n\n{1}".format(border, results)
+
+        elif "flowbits:set" in results:
+            print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
+
+        else:
+            print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
+
+
 
 
 p = ArgumentParser()
@@ -140,14 +158,18 @@ if args.key:
     sidcommand = r.command("sid:" + args.sid)
     sidresults = r.ssh_auth_key(sidcommand)
 
-    if sidresults:
-        if "flowbits:isset" in sidresults:
-            flowbits = r.get_flowbits(sidresults)
-    else:
+    if not sidresults:
         print "[-] sid not found"
+        sys.exit()
 
-    if flowbits:
-        print flowbits
+    if "flowbits:isset" in sidresults:
+
+        flowbits = r.get_flowbits(sidresults)
+        r.pretty_print(sidresults)
+        r.pretty_print(flowbits)
+
+    else:
+        r.pretty_print(sidresults)
     
 
 elif args.password:
@@ -160,17 +182,14 @@ elif args.password:
         print "[-] sid not found"
         sys.exit()
 
-    elif "flowbits:isset" in sidresults:
+    if "flowbits:isset" in sidresults:
+
         flowbits = r.get_flowbits(sidresults)
+        r.pretty_print(sidresults)
+        r.pretty_print(flowbits)
 
     else:
-        print "============="
-        print "sid: {}".format(args.sid)
-        print "=============\n"
-        print sidresults
-
-
-
+        r.pretty_print(sidresults)
 
 else:
     print "[-] No arguments provided. Use -h for assistance"
