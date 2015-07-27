@@ -18,6 +18,7 @@ class RuleLookup(object):
         self.sensor = "IP address / hostname"
         self.rulesfile_type = "single / multiple"
         self.rules_location = "rules directory or allrules file path"
+        self.username = None
 
         # The two settings below are not to be touched by the User,
         # they pseudo track state and authentication types to
@@ -105,7 +106,7 @@ class RuleLookup(object):
                 self.rule = line
 
         if "flowbits:isset" in self.rule:
-            reg = re.search("flowbits:isset,([a-zA-Z0-9\.]+)", self.rule)
+            reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", self.rule)
             flowbitgroup = reg.group(1)
 
         for line in req.content.splitlines():
@@ -114,7 +115,7 @@ class RuleLookup(object):
 
     def get_flowbits(self, sidresults):
 
-        reg = re.search("flowbits:isset,([a-zA-Z0-9\.]+)", sidresults)
+        reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", sidresults)
         flowbitgroup = reg.group(1)
         findbits_command = r.command("flowbits:set,%s;" % (flowbitgroup))
 
@@ -133,7 +134,7 @@ class RuleLookup(object):
         if "flowbits:isset" in results:
             print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
 
-        elif "flowbits:set" and "flowbits:noalert;" in results:
+        elif "flowbits:set" and "flowbits: noalert;" in results:
             print "{0}\nFlowbits\n{0}\n\n{1}".format(border, results)
 
         elif "flowbits:set" in results:
@@ -193,13 +194,6 @@ elif args.password:
 
 else:
     print "[-] No arguments provided. Use -h for assistance"
-
-
-
-
-
-
-
 
 
 
