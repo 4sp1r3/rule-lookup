@@ -15,9 +15,9 @@ class RuleLookup(object):
         # rulesfile_type identifies a single rules file or multiple
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = "IP address / hostname"
-        self.rulesfile_type = "single / multiple"
-        self.rules_location = "rules directory or allrules file path"
+        self.sensor = "IP address or Hostname"
+        self.rulesfile_type = "single/multiple"
+        self.rules_location = "/rules directory/ or allrules file path"
         self.username = None
 
         # The two settings below are not to be touched by the User,
@@ -76,11 +76,6 @@ class RuleLookup(object):
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        
-
-        if not self.credentials:
-            self.username = raw_input("Username: ")
-            self.credentials = True
 
         try:
             ssh.connect(
@@ -90,7 +85,6 @@ class RuleLookup(object):
 
         except paramiko.AuthenticationException:
             sys.exit("[-] Authentication failed")
-
 
         stdin, stdout, stderr = ssh.exec_command(command)
 
@@ -134,7 +128,7 @@ class RuleLookup(object):
         if "flowbits:isset" in results:
             print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
 
-        elif "flowbits:set" and "flowbits: noalert;" in results:
+        elif "flowbits:set" and "noalert;" in results:
             print "{0}\nFlowbits\n{0}\n\n{1}".format(border, results)
 
         elif "flowbits:set" in results:
