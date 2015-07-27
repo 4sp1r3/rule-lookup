@@ -16,10 +16,10 @@ class RuleLookup(object):
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
         self.sensor = "IP address / hostname"
-        self.rulesfile_type = "single/multiple"
+        self.rulesfile_type = "single / multiple"
         # If using multiple rules files, set the below variable to-
         # be the directory holding the ruleset
-        self.rules_location = "/rules directory/ or allrules file path"
+        self.rules_location = "/rules directory/ or allrules file path (full)"
         self.username = None
 
         # The two settings below are not to be touched by the User,
@@ -125,18 +125,18 @@ class RuleLookup(object):
 
     def pretty_print(self, results):
 
-        if not sidresults:
+        if not results:
             print "[-] sid not found"
             sys.exit()
     
         else:
             print "\n============\nRule Logic\n============\n"
-            print sidresults
+            print results
 
-        if "flowbits:isset" in sidresults:
+        if "flowbits:isset" in results:
             print "============\nFlowbit(s)\n============\n"
 
-            flowbits = self.get_flowbits(sidresults)
+            flowbits = self.get_flowbits(results)
             
             for item in flowbits.splitlines():
                 print item + "\n"
