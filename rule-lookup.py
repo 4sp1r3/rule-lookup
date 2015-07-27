@@ -15,8 +15,10 @@ class RuleLookup(object):
         # rulesfile_type identifies a single rules file or multiple
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = "IP address or Hostname"
+        self.sensor = "IP address / hostname"
         self.rulesfile_type = "single/multiple"
+        # If using multiple rules files, set the below variable to-
+        # be the directory holding the ruleset
         self.rules_location = "/rules directory/ or allrules file path"
         self.username = None
 
@@ -123,20 +125,21 @@ class RuleLookup(object):
 
     def pretty_print(self, results):
 
-        border = "============="
-
-        if "flowbits:isset" in results:
-            print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
-
-        elif "flowbits:set" and "noalert;" in results:
-            print "{0}\nFlowbits\n{0}\n\n{1}".format(border, results)
-
-        elif "flowbits:set" in results:
-            print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
-
+        if not sidresults:
+            print "[-] sid not found"
+            sys.exit()
+    
         else:
-            print "\n{0}\nRule Logic\n{0}\n\n{1}".format(border, results)
+            print "\n============\nRule Logic\n============\n"
+            print sidresults
 
+        if "flowbits:isset" in sidresults:
+            print "============\nFlowbit(s)\n============\n"
+
+            flowbits = self.get_flowbits(sidresults)
+            
+            for item in flowbits.splitlines():
+                print item + "\n"
 
 
 
@@ -152,39 +155,14 @@ if args.key:
     r.auth_type = "key"
     sidcommand = r.command("sid:" + args.sid)
     sidresults = r.ssh_auth_key(sidcommand)
-
-    if not sidresults:
-        print "[-] sid not found"
-        sys.exit()
-
-    if "flowbits:isset" in sidresults:
-
-        flowbits = r.get_flowbits(sidresults)
-        r.pretty_print(sidresults)
-        r.pretty_print(flowbits)
-
-    else:
-        r.pretty_print(sidresults)
-    
+    r.pretty_print(sidresults)
 
 elif args.password:
     r = RuleLookup()
     r.auth_type = "password"
     sidcommand = r.command("sid:" + args.sid)
     sidresults = r.ssh_auth_password(sidcommand)
-
-    if not sidresults:
-        print "[-] sid not found"
-        sys.exit()
-
-    if "flowbits:isset" in sidresults:
-
-        flowbits = r.get_flowbits(sidresults)
-        r.pretty_print(sidresults)
-        r.pretty_print(flowbits)
-
-    else:
-        r.pretty_print(sidresults)
+    r.pretty_print(sidresults)
 
 else:
     print "[-] No arguments provided. Use -h for assistance"
