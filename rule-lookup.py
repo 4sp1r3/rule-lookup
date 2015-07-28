@@ -17,18 +17,18 @@ class RuleLookup(object):
         # multiple rules files, or the full path to one rules file
         self.sensor = "IP address / hostname"
         self.rulesfile_type = "single / multiple"
+        #
         # If using multiple rules files, set the below variable to-
         # be the directory holding the ruleset
-        self.rules_location = "/rules directory/ or allrules file path (full)"
-        self.username = None
-
+        self.rules_location = "/etc/suricata/rules/allRules.rules"
+        #
         # The two settings below are not to be touched by the User,
         # they pseudo track state and authentication types to
         # prevent Paramiko from prompting for authentication during 
         # second connection to check for flowbits 
         self.auth_type = None
         self.credentials = False
-
+        #
         # If hosting the content of an allrules file on a web server,
         # the allRules URL is to be set below:
         self.allrules_url = None
