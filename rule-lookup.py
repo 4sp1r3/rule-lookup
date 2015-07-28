@@ -31,7 +31,7 @@ class RuleLookup(object):
         #
         # If hosting the content of an allrules file on a web server,
         # the allRules URL is to be set below:
-        self.allrules_url = None
+        self.allrules_url = "http://127.0.0.1/index.html"
 
 
     def command(self, search_string):
@@ -94,20 +94,27 @@ class RuleLookup(object):
 
     def rulelookup_html(self, sid):
         flowbits = []
-
         req = requests.get(self.allrules_url)
 
         for line in req.content.splitlines():
-            if self.sid in line:
-                self.rule = line
+            if sid in line:
+                print "\n============\nRule Logic\n============\n"
+                rule = line
+                print rule
 
-        if "flowbits:isset" in self.rule:
-            reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", self.rule)
+        if "flowbits:isset" in rule:
+            reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", rule)
             flowbitgroup = reg.group(1)
+            print "\n============\nFlowbits\n============\n"
 
-        for line in req.content.splitlines():
-            if "flowbits:set,{};".format(flowbitgroup) in line:
-                self.flowbits.append(line)
+            for line in req.content.splitlines():
+                if "flowbits:set,{};".format(flowbitgroup) in line:
+                    flowbits.append(line)
+
+            for item in flowbits:
+                print item
+
+            print "\n"   
 
     def get_flowbits(self, sidresults):
 
@@ -163,6 +170,10 @@ elif args.password:
     sidcommand = r.command("sid:" + args.sid + ";")
     sidresults = r.ssh_auth_password(sidcommand)
     r.pretty_print(sidresults)
+
+elif args.web:
+    r = RuleLookup()
+    r.rulelookup_html("sid:" + args.sid + ";")
 
 else:
     print "[-] No arguments provided. Use -h for assistance"
