@@ -1,10 +1,10 @@
-# rule-lookup
+#rule-lookup
 
-#Description (short)
+##Description (short)
 
 Given a Snort / Suricata rule sid, rule-lookup.py will query a given sensor or web page for its rule logic. Additionally, rule-lookup will resolve flowbits dependencies to offer a more complete view of what happened when a rule fired.
 
-#Description (long)
+#D#escription (long)
 
 Once an IDS is up and running, two of the most important things to have are:
 
@@ -25,7 +25,7 @@ Before firing the initial rule (sid 2018234), Suricata first takes steps to veri
 
 More on flowbits can be found here: http://manual.snort.org/node470.html
 
-#Example / Output:
+##Example / Output:
 
 ```
 rule-lookup.py -p 2018234
@@ -45,7 +45,7 @@ Flowbit(s)
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ET POLICY Java Client HTTP Request"; flow:established,to_server; content:" Java/1."; http_header; flowbits:set,ET.http.javaclient; flowbits:noalert; classtype:misc-activity; sid:2013035; rev:2;)
 ```
 
-#Usage
+##Usage
 
 ```
 poorbillionaire@pb:~/git/rule-lookup$ python rule-lookup.py -h
@@ -61,7 +61,7 @@ optional arguments:
   -k, --key       SSH and key-based authentication
 ```
 
-#Requirements
+##Requirements
 
 -You have a way to get rule sids when alerts fire. Unified2 logging and Barnyard2 accomplish this well.
 -You have at least one sensor or webpage to point this script at, which contains all rules in the environment
@@ -70,7 +70,7 @@ optional arguments:
 -If querying the sensor and not a web page, your IDS sensor's default shell supports bash style 'for' loops
 -If querying the sensor and not a web page, your sensor is running a modern version of Grep
 
-#Support scope
+##Support scope
 
 -Rule-lookup supports both password and key-based SSH authentication
 
@@ -80,7 +80,7 @@ optional arguments:
 
 -If querying a web server, all rules must be on the same web page
 
-# Configuration
+##Configuration
 
 A small amount of configuration of this script is required. This is accomplished by modifying the values under __init__ in the RuleLookup class. You will need to know the following:
 
