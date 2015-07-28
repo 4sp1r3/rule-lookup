@@ -64,16 +64,10 @@ optional arguments:
 #Requirements
 
 -You have a way to get rule sids when alerts fire. Unified2 logging and Barnyard2 accomplish this well.
-
-
 -You have at least one sensor or webpage to point this script at, which contains all rules in the environment
-
 -You update all rulesets in all locations around the same time. Having different rule versions running on different sensors defeats the goal of obtaining accurate data
-
 -If querying the sensor and not a web page, your IDS sensor must be "Unix-like"
-
 -If querying the sensor and not a web page, your IDS sensor's default shell supports bash style 'for' loops
-
 -If querying the sensor and not a web page, your sensor is running a modern version of Grep
 
 #Support scope
