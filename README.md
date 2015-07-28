@@ -73,11 +73,8 @@ optional arguments:
 ##Support scope
 
 -Rule-lookup supports both password and key-based SSH authentication
-
 -Rules can be copied to a web server and rule-lookup contains support for querying a web page. Useful for environments when not all Analysts have access to the IDS infrastructure
-
 -Rule-lookup supports an "allrules" file, or multiple rules files when querying a local sensor
-
 -If querying a web server, all rules must be on the same web page
 
 ##Configuration
