@@ -12,7 +12,6 @@ Once an IDS is up and running, two of the most important things to have are:
 >A way to access current and accurate rule logic for the rules which do fire
 
 Often times (in my experience), Analyts are left to Google the sid for rules that fire, so proper analysis can be completed. The problem with this strategy is that rules contain revisions. Depending on how often (or not often) a security group updates the ruleset(s), an Analyst may be guessing as to which rule revision is running in memory on their sensors at a given moment.
-
 Some tools have built-in support to query for local ruleset logic (ie Snorby, though its development has ceased). Other tools defer to hard-coded online resources, and still other tools provide no support for this at all; specifically SIEM solutions which aggregate data from various security devices. Even the tools with built-in support only provide half of the story. Consider the scenario below, in which sid 2018234 fired into an Analysts view:
 
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"ET INFO JAR Sent Claiming To Be Text Content - Likely Exploit Kit"; flow:established,to_client; flowbits:isset,ET.http.javaclient; content:"Content-Type|3A| text/"; http_header; content:"|0d 0a 0d 0a|PK"; content:".class"; fast_pattern; distance:10; within:500; classtype:bad-unknown; sid:2018234; rev:3;)
@@ -82,9 +81,7 @@ optional arguments:
 A small amount of configuration of this script is required. This is accomplished by modifying the values under __init__ in the RuleLookup class. You will need to know the following:
 
 -How do you want to access the rule logic? Will rule-lookup query the sensor directly, or query a web page which contains a copy of the full rulset(s)?
-
 -When querying a sensor directly, where are the rules located?
-
 -When querying a web page, what is the URL?
 
 #Example Configuration (SSH authentication)
