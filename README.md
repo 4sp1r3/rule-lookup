@@ -92,17 +92,18 @@ A small amount of configuration of this script is required. This is accomplished
 
 ###Example Configuration (SSH authentication)
 
-        # Configuration settings, to be selected by the User
+# SSH ONLY: Configuration settings, to be selected by the User
         # Sensor can be IP or hostname
-        # rulesfile_type identifies a single rules file or multiple
+        # rulesfile_type identifies a single rules file or multiple rules files
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = "sensor1"
-        self.rulesfile_type = "single"
+        self.sensor = "IP address or Hostname"
+        self.rulesfile_type = "single / multiple"
+        self.rules_location = "/etc/snort/rules/"
         #
-        # If using multiple rules files, set the below variable to-
-        # be the directory holding the ruleset
-        self.rules_location = "/etc/snort/rules/allRules.rules"
+        # If hosting the content of an allrules file on a web server,
+        # the allRules URL is to be set below:
+        self.allrules_url = "<url>"
         #
         # The two settings below are not to be touched by the User,
         # they pseudo track state and authentication types to
@@ -110,10 +111,6 @@ A small amount of configuration of this script is required. This is accomplished
         # second connection to check for flowbits 
         self.auth_type = None
         self.credentials = False
-        #
-        # If hosting the content of an allrules file on a web server,
-        # the allRules URL is to be set below:
-        self.allrules_url = "<url>"
 
 ###Observations / Unfrequently Asked Questions
 
