@@ -10,17 +10,19 @@ class RuleLookup(object):
 
     def __init__(self):
 
-        # Configuration settings, to be selected by the User
+        # SSH ONLY: Configuration settings, to be selected by the User
+        #
         # Sensor can be IP or hostname
-        # rulesfile_type identifies a single rules file or multiple
+        # rulesfile_type identifies a single rules file or multiple rules files
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = "pi-sensor01"
-        self.rulesfile_type = "single"
+        self.sensor = "IP address or Hostname"
+        self.rulesfile_type = "single / multiple"
+        self.rules_location = "/etc/snort/rules/"
         #
-        # If using multiple rules files, set the below variable to-
-        # be the directory holding the ruleset
-        self.rules_location = "/etc/suricata/rules/allRules.rules"
+        # If hosting the content of an allrules file on a web server,
+        # the allRules URL is to be set below:
+        self.allrules_url = "<url>"
         #
         # The two settings below are not to be touched by the User,
         # they pseudo track state and authentication types to
@@ -28,10 +30,6 @@ class RuleLookup(object):
         # second connection to check for flowbits 
         self.auth_type = None
         self.credentials = False
-        #
-        # If hosting the content of an allrules file on a web server,
-        # the allRules URL is to be set below:
-        self.allrules_url = None
 
 
     def command(self, search_string):
@@ -93,20 +91,25 @@ class RuleLookup(object):
 
     def rulelookup_html(self, sid):
         flowbits = []
-
         req = requests.get(self.allrules_url)
 
         for line in req.content.splitlines():
-            if self.sid in line:
-                self.rule = line
+            if sid in line:
+                print "\n============\nRule Logic\n============\n"
+                rule = line
+                print rule
 
-        if "flowbits:isset" in self.rule:
-            reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", self.rule)
+        if "flowbits:isset" in rule:
+            reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", rule)
             flowbitgroup = reg.group(1)
+            print "\n============\nFlowbits\n============\n"
 
-        for line in req.content.splitlines():
-            if "flowbits:set,{};".format(flowbitgroup) in line:
-                self.flowbits.append(line)
+            for line in req.content.splitlines():
+                if "flowbits:set,{};".format(flowbitgroup) in line:
+                    flowbits.append(line)
+
+            for item in flowbits:
+                print item
 
     def get_flowbits(self, sidresults):
 
@@ -144,8 +147,8 @@ class RuleLookup(object):
 
 p = ArgumentParser()
 p.add_argument("-w", "--web", help="Get rule from an HTML page", action="store_true")
-p.add_argument("-p", "--password", help="SSH and password authentication", action="store_true")
-p.add_argument("-k", "--key", help="SSH and key-based authentication", action="store_true")
+p.add_argument("-p", "--password", help="Get rule using SSH + password auth", action="store_true")
+p.add_argument("-k", "--key", help="Get rule SSH using key-based auth", action="store_true")
 p.add_argument("sid", help="Rule sid")
 args = p.parse_args()
 
@@ -162,6 +165,10 @@ elif args.password:
     sidcommand = r.command("sid:" + args.sid + ";")
     sidresults = r.ssh_auth_password(sidcommand)
     r.pretty_print(sidresults)
+
+elif args.web:
+    r = RuleLookup()
+    r.rulelookup_html("sid:" + args.sid + ";")
 
 else:
     print "[-] No arguments provided. Use -h for assistance"
