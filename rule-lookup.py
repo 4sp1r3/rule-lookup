@@ -15,8 +15,8 @@ class RuleLookup(object):
         # rulesfile_type identifies a single rules file or multiple
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = "IP address / hostname"
-        self.rulesfile_type = "single / multiple"
+        self.sensor = "pi-sensor01"
+        self.rulesfile_type = "single"
         #
         # If using multiple rules files, set the below variable to-
         # be the directory holding the ruleset
@@ -81,8 +81,7 @@ class RuleLookup(object):
 
         try:
             ssh.connect(
-                    self.sensor,
-                    username=self.username,
+                    self.sensor
                        )
 
         except paramiko.AuthenticationException:

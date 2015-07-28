@@ -135,4 +135,4 @@ This script is oddly specific, and will probably never be used by anyone besides
 
 There are better ways to do this, you know that right?
 
-> By all means, make those ways a thing.
+> Probably. By all means, make those ways a thing.
