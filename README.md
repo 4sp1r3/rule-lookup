@@ -36,7 +36,9 @@ rule-lookup.py -p 2018234
 Rule Logic
 ============
 
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"ET INFO JAR Sent Claiming To Be Text Content - Likely Exploit Kit"; flow:established,to_client; flowbits:isset,ET.http.javaclient; content:"Content-Type|3A| text/"; http_header; content:"|0d 0a 0d 0a|PK"; content:".class"; fast_pattern; distance:10; within:500; classtype:bad-unknown; sid:2018234; rev:3;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"ET INFO JAR Sent Claiming To Be Text Content - Likely Exploit Kit"; flow:established,
+
+to_client; flowbits:isset,ET.http.javaclient; content:"Content-Type|3A| text/"; http_header; content:"|0d 0a 0d 0a|PK"; content:".class"; fast_pattern; distance:10; within:500; classtype:bad-unknown; sid:2018234; rev:3;)
 
 ============
 Flowbit(s)
