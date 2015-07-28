@@ -8,8 +8,8 @@ Given a Snort / Suricata rule sid, rule-lookup.py will query a given sensor or w
 
 Once an IDS is up and running, two of the most important things to have are:
 
--A copy of the traffic which caused a given rule to fire
--A way to access current and accurate rule logic for the rules which do fire
+*A copy of the traffic which caused a given rule to fire
+*A way to access current and accurate rule logic for the rules which do fire
 
 Often times (in my experience), Analyts are left to Google the sid for rules that fire, so proper analysis can be completed. The problem with this strategy is that rules contain revisions. Depending on how often (or not often) a security group updates the ruleset(s), an Analyst may be guessing as to which rule revision is running in memory on their sensors at a given moment.
 
