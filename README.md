@@ -92,7 +92,7 @@ A small amount of configuration of this script is required. This is accomplished
 
 ###Example Configuration (SSH authentication)
 
-# SSH ONLY: Configuration settings, to be selected by the User
+        # SSH ONLY: Configuration settings, to be selected by the User
         # Sensor can be IP or hostname
         # rulesfile_type identifies a single rules file or multiple rules files
         # rules_location is either a full directory path containing-
