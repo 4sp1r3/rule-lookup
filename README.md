@@ -27,6 +27,7 @@ More on flowbits can be found here: http://manual.snort.org/node470.html
 
 #Example / Output:
 
+"""
 rule-lookup.py -p 2018234
 <enter username>
 <enter password>
@@ -42,6 +43,7 @@ Flowbit(s)
 ============
 
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ET POLICY Java Client HTTP Request"; flow:established,to_server; content:" Java/1."; http_header; flowbits:set,ET.http.javaclient; flowbits:noalert; classtype:misc-activity; sid:2013035; rev:2;)
+"""
 
 #Usage
 
