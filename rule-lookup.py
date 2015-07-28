@@ -153,14 +153,14 @@ args = p.parse_args()
 if args.key:
     r = RuleLookup()
     r.auth_type = "key"
-    sidcommand = r.command("sid:" + args.sid)
+    sidcommand = r.command("sid:" + args.sid + ";")
     sidresults = r.ssh_auth_key(sidcommand)
     r.pretty_print(sidresults)
 
 elif args.password:
     r = RuleLookup()
     r.auth_type = "password"
-    sidcommand = r.command("sid:" + args.sid)
+    sidcommand = r.command("sid:" + args.sid + ";")
     sidresults = r.ssh_auth_password(sidcommand)
     r.pretty_print(sidresults)
 
