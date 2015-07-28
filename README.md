@@ -115,3 +115,24 @@ A small amount of configuration of this script is required. This is accomplished
         # the allRules URL is to be set below:
         self.allrules_url = "<url>"
 
+###Observations / Unfrequently Asked Questions
+
+This is basically just remote Grep isn't it?
+
+> Yep.
+
+You could have just written this in Bash
+
+> I suck, I know.
+
+This script is kind of a pig
+
+> It is.
+
+This script is oddly specific, and will probably never be used by anyone besides yourself
+
+> True.
+
+There are better ways to do this, you know that right?
+
+> By all means, make those ways a thing.
