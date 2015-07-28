@@ -97,9 +97,9 @@ A small amount of configuration of this script is required. This is accomplished
         # rulesfile_type identifies a single rules file or multiple rules files
         # rules_location is either a full directory path containing-
         # multiple rules files, or the full path to one rules file
-        self.sensor = "IP address or Hostname"
-        self.rulesfile_type = "single / multiple"
-        self.rules_location = "/etc/snort/rules/"
+        self.sensor = "sensor1.local"
+        self.rulesfile_type = "single"
+        self.rules_location = "/etc/snort/rules/allrules.rules"
         #
         # If hosting the content of an allrules file on a web server,
         # the allRules URL is to be set below:
