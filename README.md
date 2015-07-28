@@ -22,7 +22,7 @@ This is a fairly straight-forward rule to interpret at first glance. This rule i
 
 Before firing the initial rule (sid 2018234), Suricata first takes steps to verify that this is a Java client making a connection to the internet with a Java user-agent by utilizing sid 2013035. That being said, sid 2013035 will never fire - the "flowbits:noalert" piece guarantees that. That being said, understanding the full scope of an alert and surrounding events can be extremely valuable. 
 
-More on flowbits can be found here: http://manual.snort.org/node470.html
+More on flowbits can be found [here](http://manual.snort.org/node470.html)
 
 ###Example / Output:
 
@@ -35,13 +35,18 @@ rule-lookup.py -p 2018234
 Rule Logic
 ============
 
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"ET INFO JAR Sent Claiming To Be Text Content - Likely Exploit Kit"; flow:established,to_client; flowbits:isset,ET.http.javaclient; content:"Content-Type|3A| text/"; http_header; content:"|0d 0a 0d 0a|PK"; content:".class"; fast_pattern; distance:10; within:500; classtype:bad-unknown; sid:2018234; rev:3;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"ET INFO JAR Sent Claiming To Be Text Content - 
+Likely Exploit Kit"; flow:established,to_client; flowbits:isset,ET.http.javaclient; content:"
+Content-Type|3A| text/"; http_header; content:"|0d 0a 0d 0a|PK"; content:".class"; fast_pattern; 
+distance:10; within:500; classtype:bad-unknown; sid:2018234; rev:3;)
 
 ============
 Flowbit(s)
 ============
 
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ET POLICY Java Client HTTP Request"; flow:established,to_server; content:" Java/1."; http_header; flowbits:set,ET.http.javaclient; flowbits:noalert; classtype:misc-activity; sid:2013035; rev:2;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ET POLICY Java Client HTTP Request"; 
+flow:established,to_server; content:" Java/1."; http_header; flowbits:set,ET.http.javaclient; 
+flowbits:noalert; classtype:misc-activity; sid:2013035; rev:2;)
 ```
 
 ###Usage
