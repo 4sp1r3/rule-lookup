@@ -64,17 +64,26 @@ optional arguments:
 #Requirements
 
 -You have a way to get rule sids when alerts fire. Unified2 logging and Barnyard2 accomplish this well.
+
+
 -You have at least one sensor or webpage to point this script at, which contains all rules in the environment
+
 -You update all rulesets in all locations around the same time. Having different rule versions running on different sensors defeats the goal of obtaining accurate data
+
 -If querying the sensor and not a web page, your IDS sensor must be "Unix-like"
+
 -If querying the sensor and not a web page, your IDS sensor's default shell supports bash style 'for' loops
+
 -If querying the sensor and not a web page, your sensor is running a modern version of Grep
 
 #Support scope
 
 -Rule-lookup supports both password and key-based SSH authentication
+
 -Rules can be copied to a web server and rule-lookup contains support for querying a web page. Useful for environments when not all Analysts have access to the IDS infrastructure
+
 -Rule-lookup supports an "allrules" file, or multiple rules files when querying a local sensor
+
 -If querying a web server, all rules must be on the same web page
 
 # Configuration
@@ -82,7 +91,9 @@ optional arguments:
 A small amount of configuration of this script is required. This is accomplished by modifying the values under __init__ in the RuleLookup class. You will need to know the following:
 
 -How do you want to access the rule logic? Will rule-lookup query the sensor directly, or query a web page which contains a copy of the full rulset(s)?
+
 -When querying a sensor directly, where are the rules located?
+
 -When querying a web page, what is the URL?
 
 #Example Configuration (SSH authentication)
