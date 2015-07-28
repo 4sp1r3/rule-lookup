@@ -4,7 +4,7 @@
 
 Given a Snort / Suricata rule sid, rule-lookup.py will query a given sensor or web page for its rule logic. Additionally, rule-lookup will resolve flowbits dependencies to offer a more complete view of what happened when a rule fired.
 
-#D#escription (long)
+##Description (long)
 
 Once an IDS is up and running, two of the most important things to have are:
 
