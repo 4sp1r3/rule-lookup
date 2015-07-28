@@ -1,6 +1,6 @@
-#rule-lookup
+##rule-lookup
 
-##Description (short)
+###Description (short)
 
 Given a Snort / Suricata rule sid, rule-lookup.py will query a given sensor or web page for its rule logic. Additionally, rule-lookup will resolve flowbits dependencies to offer a more complete view of what happened when a rule fired.
 
@@ -81,7 +81,7 @@ optional arguments:
 * Rule-lookup supports an "allrules" file, or multiple rules files when querying a local sensor
 * If querying a web server, all rules must be on the same web page
 
-##Configuration
+###Configuration
 
 A small amount of configuration of this script is required. This is accomplished by modifying the values under __init__ in the RuleLookup class. You will need to know the following:
 
