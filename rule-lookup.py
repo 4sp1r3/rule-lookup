@@ -11,7 +11,6 @@ class RuleLookup(object):
     def __init__(self):
 
         # SSH ONLY: Configuration settings, to be selected by the User
-        #
         # Sensor can be IP or hostname
         # rulesfile_type identifies a single rules file or multiple rules files
         # rules_location is either a full directory path containing-
@@ -20,6 +19,7 @@ class RuleLookup(object):
         self.rulesfile_type = "single / multiple"
         self.rules_location = "/etc/snort/rules/"
         #
+        # WWW ONLY:
         # If hosting the content of an allrules file on a web server,
         # the allRules URL is to be set below:
         self.allrules_url = "<url>"
