@@ -10,17 +10,20 @@ class RuleLookup(object):
 
     def __init__(self):
 
-        # Configuration settings, to be selected by the User
+        # SSH ONLY: Configuration settings, to be selected by the User
         # Sensor can be IP or hostname
-        # rulesfile_type identifies a single rules file or multiple
-        # rules_location is either a full directory path containing-
-        # multiple rules files, or the full path to one rules file
+        # rulesfile_type identifies a single rules file or multiple rules files
         self.sensor = "IP address / hostname"
         self.rulesfile_type = "single / multiple"
         #
-        # If using multiple rules files, set the below variable to-
-        # be the directory holding the ruleset
-        self.rules_location = "/etc/suricata/rules/allRules.rules"
+        # SSH ONLY: If using multiple rules files, set the below variable 
+        # to the /directory/ holding your rules files. Otherwise, it 
+        # should be the full path of you allrules file
+        self.rules_location = "/etc/snort/rules/allRules.rules"
+        #
+        # If hosting the content of an allrules file on a web server,
+        # the allRules URL is to be set below:
+        self.allrules_url = "<url>"
         #
         # The two settings below are not to be touched by the User,
         # they pseudo track state and authentication types to
@@ -28,10 +31,6 @@ class RuleLookup(object):
         # second connection to check for flowbits 
         self.auth_type = None
         self.credentials = False
-        #
-        # If hosting the content of an allrules file on a web server,
-        # the allRules URL is to be set below:
-        self.allrules_url = "http://127.0.0.1/index.html"
 
 
     def command(self, search_string):
@@ -114,8 +113,6 @@ class RuleLookup(object):
             for item in flowbits:
                 print item
 
-            print "\n"   
-
     def get_flowbits(self, sidresults):
 
         reg = re.search("flowbits:isset,([a-zA-Z0-9_\.]+)", sidresults)
@@ -152,8 +149,8 @@ class RuleLookup(object):
 
 p = ArgumentParser()
 p.add_argument("-w", "--web", help="Get rule from an HTML page", action="store_true")
-p.add_argument("-p", "--password", help="SSH and password authentication", action="store_true")
-p.add_argument("-k", "--key", help="SSH and key-based authentication", action="store_true")
+p.add_argument("-p", "--password", help="Get rule using SSH + password auth", action="store_true")
+p.add_argument("-k", "--key", help="Get rule SSH using key-based auth", action="store_true")
 p.add_argument("sid", help="Rule sid")
 args = p.parse_args()
 
