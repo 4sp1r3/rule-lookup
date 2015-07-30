@@ -114,7 +114,11 @@ A small amount of configuration of this script is required. This is accomplished
 
 ###Observations / Unfrequently Asked Questions
 
-This is basically just remote Grep isn't it?
+Your "Requirements" section basically says "To use this tool, your IDS should be running Linux"
+
+> Yeah, basically.
+
+This is pretty much just remote Grep isn't it?
 
 > Yep.
 
